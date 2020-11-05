@@ -1,0 +1,108 @@
+Loop1:  ldc msg1      ;ask user for input
+        sout                
+        ld newline
+        aout
+        ldc string          
+        add new             
+        sin                 
+        ld newline
+        aout
+Loop2:  ld new        ;update "new" to point at the end of string
+        add one
+        st new
+        ldc string
+        add new
+        ldi
+        jnz Loop2           
+        ldc msg2      ;ask if the user wants to input another string
+        sout
+        ld newline
+        aout
+        ain
+        sub uplim
+        jzop Loop1
+        ld new
+        sub new 
+        st new
+        ld newline
+        aout
+Begin:  ldc string    ;program goes through the letters and counts
+        add new
+        ldi
+        jz Done
+        sub lowlim
+        jzop Lower
+        add lowlim     ;letter is uppercase
+        sub upp
+        jn Skip
+        st x
+        ldc table
+        add x
+        ldi
+        add one
+        push
+        ldc table
+        add x
+        sti
+        ld new
+        add one
+        st new
+        ja Begin
+Lower:  add lowlim     ;letter is lower case
+        sub low
+        jn Skip
+        sub alph
+        jzop Skip
+        add alph
+        st x
+        ldc table
+        add x
+        ldi
+        add one
+        push
+        ldc table
+        add x
+        sti
+Skip:   ld new
+        add one
+        st new
+        ja Begin
+Done:   ld new     ;reset new
+        sub new
+        st new
+Dloop:  ld new      ;display loop
+        add upp
+        aout 
+        ld colon
+        aout
+        ldc table
+        add new
+        ldi
+        dout
+        ld newline
+        aout
+        ld new
+        add one
+        st new
+        ld alph
+        sub one
+        st alph
+        jz Quit
+        ja Dloop
+Quit:   halt 
+x:      dw 0
+msg1:   dw "enter a string of characters:"
+msg2:   dw "would you like to enter another string y/n?"
+newline:dw 10
+colon:  dw ':'
+uplim:  dw 120
+upp:    dw 65
+low:    dw 97
+new:    dw 0 
+one:    dw 1
+lowlim: dw 91
+alph:   dw 26
+counter:dw 125
+table:  dw 26 dup 0
+        dw 0
+string: dw 0
